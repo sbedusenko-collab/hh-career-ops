@@ -74,6 +74,29 @@ class VacancyDB:
 
                 CREATE INDEX IF NOT EXISTS idx_eval_score ON evaluations(total_score DESC);
                 CREATE INDEX IF NOT EXISTS idx_eval_grade ON evaluations(grade);
+
+                -- Снапшоты зарплатного анализа для отслеживания динамики
+                CREATE TABLE IF NOT EXISTS salary_snapshots (
+                    id            INTEGER PRIMARY KEY AUTOINCREMENT,
+                    query         TEXT,       -- поисковый запрос
+                    area          INTEGER,    -- регион
+                    experience    TEXT,       -- фильтр по опыту или 'all'
+                    schedule      TEXT,       -- фильтр по графику или 'all'
+                    sample_size   INTEGER,    -- количество вакансий с зарплатой
+                    total_found   INTEGER,    -- всего найдено вакансий
+                    salary_min    INTEGER,
+                    salary_p25    INTEGER,    -- 25-й перцентиль
+                    salary_median INTEGER,
+                    salary_p75    INTEGER,    -- 75-й перцентиль
+                    salary_max    INTEGER,
+                    salary_mean   INTEGER,
+                    currency      TEXT DEFAULT 'RUR',
+                    gross         INTEGER DEFAULT 1,
+                    breakdown     TEXT,       -- JSON: разбивка по опыту/графику
+                    snapshot_date TEXT DEFAULT (date('now'))
+                );
+
+                CREATE INDEX IF NOT EXISTS idx_salary_query ON salary_snapshots(query, snapshot_date);
             """)
 
     def exists(self, vacancy_id: str) -> bool:
@@ -150,6 +173,36 @@ class VacancyDB:
             """, (min_score, limit)).fetchall()
             return [dict(r) for r in rows]
 
+    def save_salary_snapshot(self, snapshot: dict) -> None:
+        with self._conn() as conn:
+            conn.execute("""
+                INSERT INTO salary_snapshots
+                (query, area, experience, schedule, sample_size, total_found,
+                 salary_min, salary_p25, salary_median, salary_p75, salary_max,
+                 salary_mean, currency, gross, breakdown)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            """, (
+                snapshot["query"], snapshot.get("area", 0),
+                snapshot.get("experience", "all"), snapshot.get("schedule", "all"),
+                snapshot["sample_size"], snapshot["total_found"],
+                snapshot["salary_min"], snapshot["salary_p25"],
+                snapshot["salary_median"], snapshot["salary_p75"],
+                snapshot["salary_max"], snapshot["salary_mean"],
+                snapshot.get("currency", "RUR"), int(snapshot.get("gross", True)),
+                json.dumps(snapshot.get("breakdown", {}), ensure_ascii=False),
+            ))
+
+    def get_salary_history(self, query: str, days: int = 90) -> list[dict]:
+        """История снапшотов для отслеживания динамики зарплат."""
+        with self._conn() as conn:
+            rows = conn.execute("""
+                SELECT * FROM salary_snapshots
+                WHERE query = ?
+                  AND snapshot_date >= date('now', ? || ' days')
+                ORDER BY snapshot_date
+            """, (query, f"-{days}")).fetchall()
+            return [dict(r) for r in rows]
+
     def get_stats(self) -> dict:
         with self._conn() as conn:
             total = conn.execute("SELECT COUNT(*) FROM evaluations").fetchone()[0]
@@ -157,4 +210,6 @@ class VacancyDB:
                 "SELECT grade, COUNT(*) FROM evaluations GROUP BY grade"
             ).fetchall())
             applied = conn.execute("SELECT COUNT(*) FROM applications").fetchone()[0]
-            return {"total": total, "by_grade": by_grade, "applied": applied}
+            salary_analyses = conn.execute("SELECT COUNT(*) FROM salary_snapshots").fetchone()[0]
+            return {"total": total, "by_grade": by_grade, "applied": applied,
+                    "salary_analyses": salary_analyses}
