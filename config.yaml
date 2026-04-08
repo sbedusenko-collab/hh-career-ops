@@ -1,4 +1,9 @@
-# hh.ru OAuth2 credentials
+# Бэкенд для получения вакансий: "api" или "scraper"
+# api     — официальный hh.ru API (требует регистрации на dev.hh.ru, только для организаций)
+# scraper — парсинг через браузер Playwright (не требует API ключей)
+backend: "scraper"
+
+# hh.ru OAuth2 credentials (только для backend: api)
 # Получить на https://dev.hh.ru
 hh:
   client_id: "YOUR_CLIENT_ID"

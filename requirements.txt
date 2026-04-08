@@ -1,3 +1,10 @@
 httpx>=0.27.0
 pyyaml>=6.0.1
 rich>=13.7.0
+
+# Для backend: scraper
+playwright>=1.44.0
+beautifulsoup4>=4.12.0
+
+# Для backend: api (опционально, только если есть доступ к dev.hh.ru)
+# Зависимостей нет — используется встроенный httpx

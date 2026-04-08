@@ -10,7 +10,8 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import yaml
 
-from src.api.vacancies import Vacancy, VacancySearch
+from src.api.base import get_backend
+from src.api.vacancies import Vacancy
 from src.core.db import VacancyDB
 from src.core.scorer import (
     CriterionScore,
@@ -100,7 +101,7 @@ class BatchEvaluator:
 
         self.profile = load_profile(self.config["paths"]["profile"])
         self.db = VacancyDB(self.config["paths"]["db"])
-        self.searcher = VacancySearch()
+        self.searcher = get_backend(config_path)
         self.batch_size = self.config["evaluation"].get("batch_size", 5)
         self.min_score = self.config["evaluation"].get("min_score_to_save", 2.0)
 

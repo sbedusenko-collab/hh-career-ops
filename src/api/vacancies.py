@@ -84,7 +84,7 @@ def _parse_vacancy(data: dict) -> Vacancy:
     )
 
 
-class VacancySearch:
+class VacancySearch:  # реализует VacancyBackend (импорт избегаем для предотвращения циклов)
     def __init__(self, client: HHClient | None = None):
         self.client = client or HHClient()
 
