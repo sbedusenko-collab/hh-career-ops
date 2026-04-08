@@ -1,0 +1,74 @@
+# Профиль соискателя — заполни под себя
+# Claude использует этот файл для оценки соответствия вакансиям
+
+personal:
+  name: "Иван Иванов"
+  target_role: "Backend Developer"
+  experience_years: 5
+  location: "Москва"
+  relocation: false        # готов к переезду?
+  remote_preferred: true   # предпочитаешь удалёнку?
+
+# Ключевые навыки (по убыванию важности)
+skills:
+  primary:
+    - Python
+    - FastAPI
+    - PostgreSQL
+    - Docker
+    - Redis
+  secondary:
+    - Kubernetes
+    - Celery
+    - RabbitMQ
+    - Git
+    - Linux
+  learning:
+    - Golang
+    - Kafka
+
+# Зарплатные ожидания
+salary:
+  min: 150000        # минимум, руб. (gross)
+  target: 200000     # желаемая, руб. (gross)
+  currency: RUR
+
+# Что важно в работе (влияет на веса критериев оценки)
+priorities:
+  remote_work: high        # high / medium / low
+  salary: high
+  tech_stack: high
+  company_stability: medium
+  career_growth: medium
+  dms: low
+  work_life_balance: high
+
+# Стоп-слова — вакансии с этими словами получают штраф
+dealbreakers:
+  - "без опыта"
+  - "стажёр"
+  - "1С"
+  - "переезд обязателен"
+  - "работа в офисе 5/2"
+
+# Предпочтительные компании (бонус к оценке)
+preferred_companies: []
+
+# Компании-исключения (не рассматривать)
+excluded_companies: []
+
+# ID резюме на hh.ru (получить через API или из URL резюме)
+resume_id: "YOUR_RESUME_ID"
+
+# Шаблон сопроводительного письма
+cover_letter_template: |
+  Добрый день!
+
+  Меня заинтересовала ваша вакансия {vacancy_title} в компании {company_name}.
+
+  {ai_generated_body}
+
+  Готов обсудить детали в удобное для вас время.
+
+  С уважением,
+  {name}

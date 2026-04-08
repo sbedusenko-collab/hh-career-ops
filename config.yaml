@@ -1,0 +1,41 @@
+# hh.ru OAuth2 credentials
+# Получить на https://dev.hh.ru
+hh:
+  client_id: "YOUR_CLIENT_ID"
+  client_secret: "YOUR_CLIENT_SECRET"
+  redirect_uri: "http://localhost:8080/callback"
+  # Токены заполняются автоматически после авторизации
+  access_token: ""
+  refresh_token: ""
+
+# Настройки поиска
+search:
+  # Регионы: 1=Москва, 2=Санкт-Петербург, 113=Россия
+  area: [1]
+  # Тип занятости: full, part, project, volunteer, probation
+  employment: ["full"]
+  # График: fullDay, shift, flexible, remote, flyInFlyOut
+  schedule: ["remote", "flexible", "fullDay"]
+  # Минимальная зарплата (руб.)
+  salary_from: 100000
+  # Только вакансии с указанной зарплатой
+  only_with_salary: false
+  # Количество вакансий за раз
+  per_page: 50
+  # Период поиска в днях (макс 30)
+  search_period: 7
+
+# Настройки оценки
+evaluation:
+  # Минимальная оценка для автоматического предложения откликнуться
+  min_score_to_apply: 3.5
+  # Минимальная оценка для сохранения в базу
+  min_score_to_save: 2.0
+  # Параллельных оценок одновременно
+  batch_size: 5
+
+# Пути к файлам
+paths:
+  db: "data/vacancies.db"
+  profile: "data/profile.yaml"
+  logs: "data/logs/"
