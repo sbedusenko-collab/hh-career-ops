@@ -28,16 +28,17 @@ class HHClient:
     def _headers(self) -> dict:
         return {"Authorization": f"Bearer {self._token}"}
 
-    def get(self, path: str, params: dict | None = None) -> Any:
-        return self._request("GET", path, params=params)
+    def get(self, path: str, params: dict | None = None, auth: bool = True) -> Any:
+        return self._request("GET", path, params=params, auth=auth)
 
     def post(self, path: str, data: dict | None = None, json: dict | None = None) -> Any:
         return self._request("POST", path, data=data, json=json)
 
-    def _request(self, method: str, path: str, *, retries: int = 3, **kwargs) -> Any:
+    def _request(self, method: str, path: str, *, retries: int = 3, auth: bool = True, **kwargs) -> Any:
         for attempt in range(retries):
+            headers = self._headers() if auth else {}
             resp = self._client.request(
-                method, path, headers=self._headers(), **kwargs
+                method, path, headers=headers, **kwargs
             )
 
             if resp.status_code == 401:

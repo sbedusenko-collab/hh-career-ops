@@ -105,19 +105,24 @@ class BatchEvaluator:
         self.batch_size = self.config["evaluation"].get("batch_size", 5)
         self.min_score = self.config["evaluation"].get("min_score_to_save", 2.0)
 
-    def run(self, query: str) -> list[EvaluationResult]:
+    def run(self, query: str, limit: int = 50) -> list[EvaluationResult]:
         """
         Полный цикл: поиск → детали → оценка через claude CLI → сохранение.
 
         Args:
             query: Поисковый запрос, например "Python разработчик"
+            limit: Максимальное число вакансий для оценки (по умолчанию 50)
 
         Returns:
             Список результатов оценки, отсортированный по убыванию оценки
         """
         print(f"Ищу вакансии: «{query}»...")
-        vacancies = list(self.searcher.search(query))
-        print(f"Найдено: {len(vacancies)} вакансий")
+        vacancies = []
+        for v in self.searcher.search(query):
+            vacancies.append(v)
+            if len(vacancies) >= limit:
+                break
+        print(f"Найдено: {len(vacancies)} вакансий (лимит {limit})")
 
         # Фильтруем уже оценённые
         new_vacancies = [v for v in vacancies if not self.db.exists(v.id)]

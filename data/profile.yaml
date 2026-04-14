@@ -1,61 +1,83 @@
-# Профиль соискателя — заполни под себя
-# Claude использует этот файл для оценки соответствия вакансиям
+# Профиль соискателя — Бедусенко Вячеслав Валерьевич
+# Сгенерировано на основе резюме от 08.04.2026
 
 personal:
-  name: "Иван Иванов"
-  target_role: "Backend Developer"
-  experience_years: 5
+  name: "Бедусенко Вячеслав Валерьевич"
+  target_role: "Директор по ИТ (CIO)"
+  experience_years: 21
   location: "Москва"
-  relocation: false        # готов к переезду?
-  remote_preferred: true   # предпочитаешь удалёнку?
+  relocation: true         # готов к переезду
+  remote_preferred: false  # предпочитает офис / на месте работодателя
 
 # Ключевые навыки (по убыванию важности)
 skills:
   primary:
-    - Python
-    - FastAPI
-    - PostgreSQL
-    - Docker
-    - Redis
-  secondary:
-    - Kubernetes
-    - Celery
-    - RabbitMQ
-    - Git
+    - Управление ИТ-департаментом
+    - ИТ-стратегия и цифровизация
+    - Информационная безопасность
+    - Управление ИТ-инфраструктурой
+    - Бюджетирование и закупки
+    - VMware vSphere / ESXi
+    - Microsoft HyperV
+    - Windows Server / Active Directory
     - Linux
+    - 1С (ERP, ЗУП, Документооборот, УПП)
+  secondary:
+    - Cisco / HP / NETAPP
+    - Citrix
+    - HelpDesk / ServiceDesk
+    - IP-телефония (Avaya, Asterisk, M200)
+    - СКУД / видеонаблюдение
+    - Управление проектами
+    - Импортозамещение ПО
+    - Виртуализация
+    - Резервное копирование
+    - DLP / антивирусная защита
   learning:
-    - Golang
-    - Kafka
+    - Диспетчеризация промышленной техники
+    - IoT / промышленная автоматизация
 
-# Зарплатные ожидания
+# Зарплатные ожидания (gross, руб.)
 salary:
-  min: 150000        # минимум, руб. (gross)
-  target: 200000     # желаемая, руб. (gross)
+  min: 300000
+  target: 450000
   currency: RUR
 
-# Что важно в работе (влияет на веса критериев оценки)
+# Что важно в работе
 priorities:
-  remote_work: high        # high / medium / low
+  remote_work: low           # предпочитает офис
   salary: high
-  tech_stack: high
-  company_stability: medium
-  career_growth: medium
-  dms: low
-  work_life_balance: high
+  tech_stack: medium
+  company_stability: high    # опыт в крупных компаниях (Газпром)
+  career_growth: high        # целевая роль — CIO
+  dms: medium
+  work_life_balance: medium
 
 # Стоп-слова — вакансии с этими словами получают штраф
 dealbreakers:
   - "без опыта"
   - "стажёр"
-  - "1С"
+  - "junior"
+  - "младший специалист"
+  - "системный администратор"
   - "переезд обязателен"
-  - "работа в офисе 5/2"
+  - "продажи"
+  - "менеджер по продажам"
 
 # Предпочтительные компании (бонус к оценке)
-preferred_companies: []
+preferred_companies:
+  - "Газпром"
+  - "Росатом"
+  - "Роснефть"
+  - "РЖД"
+  - "Сибур"
+  - "Норникель"
+  - "Лукойл"
 
 # Компании-исключения (не рассматривать)
-excluded_companies: []
+excluded_companies:
+  - "ООО \"УК \"АнтрацитИнвестПроект\""   # текущее место работы
+  - "ООО \"Газпром морские проекты\""       # текущее место работы
 
 # ID резюме на hh.ru (получить через API или из URL резюме)
 resume_id: "YOUR_RESUME_ID"
@@ -71,4 +93,4 @@ cover_letter_template: |
   Готов обсудить детали в удобное для вас время.
 
   С уважением,
-  {name}
+  Бедусенко Вячеслав Валерьевич

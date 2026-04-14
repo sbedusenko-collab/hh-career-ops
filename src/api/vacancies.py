@@ -116,7 +116,7 @@ class VacancySearch:  # реализует VacancyBackend (импорт избе
         page = 0
         while True:
             params["page"] = page
-            data = self.client.get("/vacancies", params=params)
+            data = self.client.get("/vacancies", params=params, auth=False)
 
             items = data.get("items", [])
             if not items:
@@ -132,7 +132,7 @@ class VacancySearch:  # реализует VacancyBackend (импорт избе
 
     def get_detail(self, vacancy_id: str) -> Vacancy:
         """Получает полные данные вакансии включая описание и навыки."""
-        data = self.client.get(f"/vacancies/{vacancy_id}")
+        data = self.client.get(f"/vacancies/{vacancy_id}", auth=False)
         v = _parse_vacancy(data)
         v.description = data.get("description", "")
         v.key_skills = [s["name"] for s in data.get("key_skills", [])]

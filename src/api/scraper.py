@@ -234,7 +234,11 @@ class PlaywrightScraper(VacancyBackend):
             qs  = "&".join(f"{k}={v}" for k, v in params.items())
             url = f"{BASE_URL}/search/vacancy?{qs}"
 
-            self._page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            try:
+                self._page.goto(url, wait_until="domcontentloaded", timeout=30000)
+            except Exception as e:
+                print(f"  Таймаут на странице {page}, завершаю поиск: {e.__class__.__name__}")
+                break
             time.sleep(1.5)  # пауза чтобы не триггерить captcha
 
             # Проверяем captcha

@@ -7,7 +7,6 @@ OAuth2 авторизация для hh.ru API.
   3. Токены сохраняются в config.yaml автоматически
 """
 
-import threading
 import webbrowser
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs, urlencode, urlparse
@@ -76,12 +75,14 @@ class _CallbackHandler(BaseHTTPRequestHandler):
         if "code" in params:
             _auth_code = params["code"][0]
             self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
             self.end_headers()
-            self.wfile.write(b"<h2>OK! Вернись в терминал.</h2>")
+            self.wfile.write("<h2>OK! Вернись в терминал.</h2>".encode("utf-8"))
         else:
             self.send_response(400)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
             self.end_headers()
-            self.wfile.write(b"<h2>Ошибка: code не получен.</h2>")
+            self.wfile.write("<h2>Ошибка: code не получен.</h2>".encode("utf-8"))
 
     def log_message(self, *args):
         pass  # тихий режим
@@ -99,14 +100,13 @@ def authorize() -> None:
     })
     auth_url = f"{AUTH_URL}?{params}"
 
-    port = int(urlparse(hh["redirect_uri"]).port or 8080)
+    port = int(hh.get("callback_local_port", urlparse(hh["redirect_uri"]).port or 8080))
     server = HTTPServer(("localhost", port), _CallbackHandler)
 
     print(f"Открываю браузер для авторизации...\n{auth_url}")
-    threading.Thread(target=server.handle_request, daemon=True).start()
     webbrowser.open(auth_url)
 
-    # Ждём callback
+    # Ждём callback (один вызов, блокирующий)
     server.handle_request()
 
     if not _auth_code:
